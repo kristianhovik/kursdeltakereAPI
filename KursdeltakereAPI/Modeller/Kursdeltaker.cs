@@ -2,6 +2,8 @@
 {
     public class Kursdeltaker
     {
+        public int Id { get; set; } 
+
         public string Navn { get; set; }
 
         public int Alder { get; set; }
@@ -12,6 +14,6 @@
 
         public string Allergener { get; set; }
 
-        public string Kommentar {  get; set; }
+        public string Kommentar { get; set; }
     }
 }
