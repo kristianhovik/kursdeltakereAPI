@@ -7,6 +7,8 @@ using kursdeltakereAPI.Modeller;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace kursdeltakereAPI
 {
@@ -32,48 +34,58 @@ namespace kursdeltakereAPI
                 return new MongoClient(settings);
             });
 
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "kursdeltakereAPI", Version = "v1" });
+
+                var serviceDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(SwaggerGenerator));
+                if (serviceDescriptor != null)
+                {
+                    services.Remove(serviceDescriptor);
+                }
+                services.AddTransient<ISwaggerProvider, SwaggerGenerator>();
+
+
             });
 
-            // Legg til andre tjenester etter behov
+            
         }
 
         public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyMethod()
-            .AllowAnyHeader());
+                .AllowAnyHeader());
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "kursdeltakere V1");
+                });
             }
             else
             {
-                // Legg til passende feilhåndteringsmiddel for produksjon
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
-            // Legg til andre middleware etter behov
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "kursdeltakere V1");
-            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            // Konfigurer ruting
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+           
+
+           
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
+            
         }
     }
+
 }

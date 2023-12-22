@@ -17,27 +17,27 @@ namespace kursdeltakereAPI.Controllers
         }
 
 
-        // GET: KursdeltakerControll - Håndterer forespørsler om å vise en liste over deltakere
+        // GET:  - Håndterer forespørsler om å vise en liste over deltakere
         public ActionResult Index()
         {
             var kursdeltakere = _kursdeltakerCollection.Find(d => true).ToList();
             return View(kursdeltakere); 
         }
 
-        // GET: KursdeltakerControll/Details/5 - Håndterer forespørsler for å vise detaljer om en spesifikk deltaker
+        // GET: - Håndterer forespørsler for å vise detaljer om en spesifikk deltaker
         public ActionResult Details(int id)
         {
             var deltaker = _kursdeltakerCollection.Find(d => d.Id == id).FirstOrDefault();
             return View(deltaker);
         }
 
-        // GET: KursdeltakerControll/Create - Håndterer GET-forespørsler for å vise skjemaet for å opprette en ny deltaker
+        // GET: - Håndterer GET-forespørsler for å vise skjemaet for å opprette en ny deltaker
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: KursdeltakerControll/Create - Håndterer POST-forespørsler nå jeg sender inn skjemaet for å redigsere info
+        // POST:  - Håndterer POST-forespørsler nå jeg sender inn skjemaet for å redigsere info
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Kursdeltaker kursdeltaker)
@@ -53,7 +53,7 @@ namespace kursdeltakereAPI.Controllers
             }
         }
 
-        // GET: KursdeltakerControll/Edit/5 - GET-forespørsler for å vise skjemat for å redigere info
+        // GET: - GET-forespørsler for å vise skjemat for å redigere info
         public ActionResult Edit(int id)
         {
             var deltaker = _kursdeltakerCollection.Find(d => d.Id == id).FirstOrDefault();
